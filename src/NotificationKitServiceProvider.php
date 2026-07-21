@@ -13,6 +13,11 @@ final class NotificationKitServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('notification-kit')
-            ->hasConfigFile();
+            ->hasConfigFile()
+            ->hasMigrations([
+                'create_notification_kit_templates_table',
+                'create_notification_kit_template_versions_table',
+                'create_notification_kit_outbox_messages_table',
+            ]);
     }
 }
