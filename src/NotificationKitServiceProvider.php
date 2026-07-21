@@ -30,5 +30,6 @@ final class NotificationKitServiceProvider extends PackageServiceProvider
     {
         $this->app->singleton(TemplateResolver::class);
         $this->app->singleton(TemplateRenderer::class);
+        $this->app->singleton(NotificationKit::class);
     }
 }
