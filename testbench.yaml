@@ -1,0 +1,2 @@
+providers:
+  - Scrapkit\NotificationKit\NotificationKitServiceProvider
