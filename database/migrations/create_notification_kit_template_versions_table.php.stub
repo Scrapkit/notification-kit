@@ -17,9 +17,11 @@ return new class extends Migration
             $table->text('body')->nullable();
             $table->json('metadata')->nullable();
             $table->boolean('requires_confirmation');
-            $table->nullableMorphs('edited_by');
+            // Explicit index names: the generated ones would exceed the 64
+            // character limit MySQL and MariaDB enforce.
+            $table->nullableMorphs('edited_by', 'nk_versions_edited_by_index');
             $table->timestamp('created_at');
-            $table->index(['template_id', 'created_at']);
+            $table->index(['template_id', 'created_at'], 'nk_versions_template_created_index');
         });
     }
 

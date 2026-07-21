@@ -21,13 +21,15 @@ return new class extends Migration
             $table->json('recipients');
             $table->json('envelope')->nullable();
             $table->string('status', 20);
-            $table->nullableMorphs('requested_by');
-            $table->nullableMorphs('decided_by');
+            // Explicit index names: the generated ones would exceed the 64
+            // character limit MySQL and MariaDB enforce.
+            $table->nullableMorphs('requested_by', 'nk_outbox_requested_by_index');
+            $table->nullableMorphs('decided_by', 'nk_outbox_decided_by_index');
             $table->timestamp('decided_at')->nullable();
             $table->timestamp('sent_at')->nullable();
             $table->text('error')->nullable();
             $table->timestamps();
-            $table->index(['status', 'created_at']);
+            $table->index(['status', 'created_at'], 'nk_outbox_status_created_index');
         });
     }
 

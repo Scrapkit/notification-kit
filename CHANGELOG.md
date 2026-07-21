@@ -5,7 +5,16 @@ Tutte le modifiche degne di nota a `scrapkit/notification-kit`.
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il
 versionamento è [semantico](https://semver.org/lang/it/).
 
-## [Unreleased]
+## [0.1.1] - 2026-07-22
+
+### Fixed
+
+- I nomi degli indici su `template_versions` e `outbox_messages` superavano i
+  64 caratteri ammessi da MySQL e MariaDB, facendo fallire `migrate`
+  sull'applicazione host. Ora sono espliciti, e un test verifica il limite
+  (la suite gira su SQLite, che non lo applica).
+
+## [0.1.0] - 2026-07-22
 
 ### Added
 
