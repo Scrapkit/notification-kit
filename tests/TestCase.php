@@ -8,6 +8,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Scrapkit\NotificationKit\NotificationKitServiceProvider;
+use Workbench\App\Mail\InvoicePaidMail;
+use Workbench\App\Mail\WelcomeMail;
+use Workbench\App\Models\User;
+use Workbench\App\Notifications\InvoicePaidNotification;
 
 class TestCase extends Orchestra
 {
@@ -26,6 +30,12 @@ class TestCase extends Orchestra
         config()->set('mail.default', 'array');
         config()->set('queue.default', 'sync');
         config()->set('session.driver', 'array');
+        config()->set('auth.providers.users.model', User::class);
+        config()->set('notification-kit.manageables', [
+            WelcomeMail::class,
+            InvoicePaidMail::class,
+            InvoicePaidNotification::class,
+        ]);
     }
 
     protected function defineDatabaseMigrations(): void
