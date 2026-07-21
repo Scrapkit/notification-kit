@@ -17,6 +17,44 @@ it('renders markdown and resolves placeholders', function (): void {
         ->and($content->missingPlaceholders)->toBe([]);
 });
 
+it('resolves placeholders used as a link destination', function (): void {
+    $content = app(TemplateRenderer::class)->render(
+        null,
+        '[Imposta la password]({{ action.url }})',
+        ['action' => ['url' => 'https://app.test/reset/abc123']],
+    );
+
+    expect($content->bodyHtml)->toContain('<a href="https://app.test/reset/abc123">Imposta la password</a>')
+        ->and($content->missingPlaceholders)->toBe([]);
+});
+
+it('keeps a link usable when the resolved url contains spaces or parentheses', function (): void {
+    $content = app(TemplateRenderer::class)->render(
+        null,
+        '[Apri]({{ action.url }})',
+        ['action' => ['url' => 'https://app.test/a b(c)']],
+    );
+
+    expect($content->bodyHtml)->toContain('href="https://app.test/a%20b%28c%29"')
+        ->and($content->bodyHtml)->toContain('>Apri</a>');
+});
+
+it('drops a link whose resolved url uses an unsafe scheme', function (): void {
+    $content = app(TemplateRenderer::class)->render(
+        null,
+        '[Clicca]({{ action.url }})',
+        ['action' => ['url' => 'javascript:alert(1)']],
+    );
+
+    expect($content->bodyHtml)->not->toContain('javascript:alert');
+});
+
+it('reports a missing placeholder used as a link destination', function (): void {
+    $content = app(TemplateRenderer::class)->render(null, '[Apri]({{ action.url }})', []);
+
+    expect($content->missingPlaceholders)->toBe(['action.url']);
+});
+
 it('escapes html in placeholder values', function (): void {
     $content = app(TemplateRenderer::class)->render(
         null,

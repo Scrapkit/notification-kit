@@ -14,6 +14,9 @@ versionamento è [semantico](https://semver.org/lang/it/).
   modifiche fatte dagli utenti.
 - Contenuti in Markdown con segnaposto risolti da un renderer sicuro
   (`html_input: escape`, link non sicuri disabilitati, valori HTML-escaped).
+- Segnaposto utilizzabili come destinazione di un link
+  (`[Testo]({{ action.url }})`), risolti prima del parsing Markdown perché il
+  link venga generato davvero.
 - Archiviazione reversibile e storico immutabile di ogni modifica.
 - Coda di approvazione per le email che richiedono conferma manuale: snapshot
   renderizzato al momento della richiesta, invio in coda dopo l'approvazione,

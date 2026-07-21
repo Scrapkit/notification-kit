@@ -26,13 +26,15 @@ final class TemplateRenderer
      */
     public function render(?string $subject, string $bodyMarkdown, array $data): RenderedContent
     {
-        $bodyHtml = (string) Str::markdown($bodyMarkdown, [
+        $linked = $this->placeholders->resolveLinkDestinations($bodyMarkdown, $data);
+
+        $bodyHtml = (string) Str::markdown($linked['text'], [
             'html_input' => 'escape',
             'allow_unsafe_links' => false,
         ]);
 
         $body = $this->placeholders->resolve($bodyHtml, $data, escapeHtml: true);
-        $missing = $body['missing'];
+        $missing = [...$linked['missing'], ...$body['missing']];
 
         $resolvedSubject = null;
 
