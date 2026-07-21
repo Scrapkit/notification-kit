@@ -94,7 +94,7 @@ final class OutboxMessage extends Model
      */
     public function requestedBy(): MorphTo
     {
-        return $this->morphTo('requested_by');
+        return $this->morphTo('requestedBy', 'requested_by_type', 'requested_by_id');
     }
 
     /**
@@ -102,7 +102,7 @@ final class OutboxMessage extends Model
      */
     public function decidedBy(): MorphTo
     {
-        return $this->morphTo('decided_by');
+        return $this->morphTo('decidedBy', 'decided_by_type', 'decided_by_id');
     }
 
     /**

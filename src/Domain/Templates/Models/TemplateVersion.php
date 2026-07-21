@@ -65,7 +65,7 @@ final class TemplateVersion extends Model
      */
     public function editedBy(): MorphTo
     {
-        return $this->morphTo('edited_by');
+        return $this->morphTo('editedBy', 'edited_by_type', 'edited_by_id');
     }
 
     protected static function newFactory(): TemplateVersionFactory
