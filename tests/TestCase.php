@@ -40,7 +40,17 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations(): void
     {
-        foreach (glob(__DIR__.'/../database/migrations/*.php.stub') ?: [] as $stub) {
+        // The host application orders these by publish timestamp; here the
+        // table has to exist before anything alters it.
+        $stubs = glob(__DIR__.'/../database/migrations/*.php.stub') ?: [];
+
+        usort($stubs, function (string $a, string $b): int {
+            $creates = fn (string $path): int => str_starts_with(basename($path), 'create_') ? 0 : 1;
+
+            return [$creates($a), $a] <=> [$creates($b), $b];
+        });
+
+        foreach ($stubs as $stub) {
             (include $stub)->up();
         }
 

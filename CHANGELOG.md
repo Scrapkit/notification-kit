@@ -5,6 +5,23 @@ Tutte le modifiche degne di nota a `scrapkit/notification-kit`.
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il
 versionamento è [semantico](https://semver.org/lang/it/).
 
+## [0.2.0] - 2026-07-22
+
+### Added
+
+- Nuova colonna `supports_confirmation` (di proprietà del codice, popolata dal
+  sync) e migration `add_supports_confirmation_to_notification_kit_templates`.
+  Da pubblicare ed eseguire dopo l'aggiornamento.
+
+### Fixed
+
+- La conferma manuale poteva essere attivata su qualunque contenuto, anche su
+  una `Notification`, che l'host invia con `notify()` senza passare dalla
+  pipeline del kit: il flag non aveva alcun effetto e l'email partiva comunque.
+  Ora solo le `ManagedMailable` sono confermabili; l'API rifiuta con 422 il
+  tentativo di attivare la conferma altrove e la UI può nascondere l'opzione
+  leggendo `supports_confirmation`.
+
 ## [0.1.1] - 2026-07-22
 
 ### Fixed

@@ -32,6 +32,7 @@ final class TemplateResource extends JsonResource
             'sample_data' => $this->sample_data,
             'metadata' => $this->metadata ?? [],
             'requires_confirmation' => $this->requires_confirmation,
+            'supports_confirmation' => $this->supports_confirmation,
             'archived_at' => $this->archived_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];

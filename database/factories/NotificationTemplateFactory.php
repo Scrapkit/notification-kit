@@ -35,6 +35,7 @@ final class NotificationTemplateFactory extends Factory
             'sample_data' => ['user' => ['name' => 'Ada Lovelace']],
             'metadata' => [],
             'requires_confirmation' => false,
+            'supports_confirmation' => true,
             'archived_at' => null,
             'synced_at' => null,
         ];
@@ -45,9 +46,17 @@ final class NotificationTemplateFactory extends Factory
         return $this->state(['type' => TemplateType::Email]);
     }
 
+    /**
+     * Notifications are dispatched by the host, never through the kit, so
+     * they can never be held for approval.
+     */
     public function notification(): static
     {
-        return $this->state(['type' => TemplateType::Notification]);
+        return $this->state([
+            'type' => TemplateType::Notification,
+            'requires_confirmation' => false,
+            'supports_confirmation' => false,
+        ]);
     }
 
     public function archived(): static
@@ -57,7 +66,10 @@ final class NotificationTemplateFactory extends Factory
 
     public function confirmable(): static
     {
-        return $this->state(['requires_confirmation' => true]);
+        return $this->state([
+            'requires_confirmation' => true,
+            'supports_confirmation' => true,
+        ]);
     }
 
     public function customized(): static

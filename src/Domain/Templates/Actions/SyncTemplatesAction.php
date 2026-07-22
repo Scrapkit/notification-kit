@@ -10,6 +10,7 @@ use Scrapkit\NotificationKit\Domain\Templates\DataTransferObjects\TemplateDefini
 use Scrapkit\NotificationKit\Domain\Templates\Models\NotificationTemplate;
 use Scrapkit\NotificationKit\Domain\Templates\TemplateResolver;
 use Scrapkit\NotificationKit\Exceptions\NotificationKitException;
+use Scrapkit\NotificationKit\Mail\ManagedMailable;
 
 /**
  * Upserts the template definitions declared in code.
@@ -35,16 +36,20 @@ final class SyncTemplatesAction
             $definition = $this->definitionFor($class);
             $keys[] = $definition->key;
 
+            // Only a ManagedMailable travels through the kit's send pipeline,
+            // so only its content can be held for approval.
+            $supportsConfirmation = is_subclass_of($class, ManagedMailable::class);
+
             $template = NotificationTemplate::query()->where('key', $definition->key)->first();
 
             if ($template === null) {
-                $this->create($definition);
+                $this->create($definition, $supportsConfirmation);
                 $created[] = $definition->key;
 
                 continue;
             }
 
-            $this->refresh($template, $definition);
+            $this->refresh($template, $definition, $supportsConfirmation);
             $updated[] = $definition->key;
 
             $this->resolver->forget($definition->key);
@@ -74,7 +79,7 @@ final class SyncTemplatesAction
         return $class::template();
     }
 
-    private function create(TemplateDefinition $definition): void
+    private function create(TemplateDefinition $definition, bool $supportsConfirmation): void
     {
         NotificationTemplate::query()->create([
             'key' => $definition->key,
@@ -88,14 +93,19 @@ final class SyncTemplatesAction
             'placeholders' => $definition->placeholdersToArray(),
             'sample_data' => $definition->sampleData,
             'metadata' => $definition->metadata,
-            'requires_confirmation' => $definition->requiresConfirmation,
+            'requires_confirmation' => $supportsConfirmation && $definition->requiresConfirmation,
+            'supports_confirmation' => $supportsConfirmation,
             'synced_at' => now(),
         ]);
     }
 
-    private function refresh(NotificationTemplate $template, TemplateDefinition $definition): void
-    {
+    private function refresh(
+        NotificationTemplate $template,
+        TemplateDefinition $definition,
+        bool $supportsConfirmation,
+    ): void {
         $template->update([
+            'supports_confirmation' => $supportsConfirmation,
             'type' => $definition->type,
             'name' => $definition->name,
             'description' => $definition->description,

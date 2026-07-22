@@ -25,6 +25,7 @@ final class NotificationKitServiceProvider extends PackageServiceProvider
                 'create_notification_kit_templates_table',
                 'create_notification_kit_template_versions_table',
                 'create_notification_kit_outbox_messages_table',
+                'add_supports_confirmation_to_notification_kit_templates_table',
             ])
             ->hasCommand(SyncTemplatesCommand::class);
     }

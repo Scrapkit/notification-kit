@@ -28,6 +28,7 @@ use Scrapkit\NotificationKit\Support\KitConfig;
  * @property array<string, mixed> $sample_data
  * @property ?array<string, mixed> $metadata
  * @property bool $requires_confirmation
+ * @property bool $supports_confirmation
  * @property ?CarbonInterface $archived_at
  * @property ?CarbonInterface $synced_at
  * @property ?CarbonInterface $created_at
@@ -51,6 +52,7 @@ final class NotificationTemplate extends Model
         'sample_data',
         'metadata',
         'requires_confirmation',
+        'supports_confirmation',
         'archived_at',
         'synced_at',
     ];
@@ -122,6 +124,7 @@ final class NotificationTemplate extends Model
             'sample_data' => 'array',
             'metadata' => 'array',
             'requires_confirmation' => 'boolean',
+            'supports_confirmation' => 'boolean',
             'archived_at' => 'datetime',
             'synced_at' => 'datetime',
         ];

@@ -126,6 +126,12 @@ if ($dispatch->needsConfirmation()) {
 Inviare una mailable confirmable direttamente con `Mail::send()` lancia
 `ConfirmationRequiredException`: il gate di conferma non si aggira per errore.
 
+La conferma è disponibile **solo** per le `ManagedMailable` inviate con
+`NotificationKit::to(...)->send(...)`: sono le uniche che attraversano la
+pipeline del kit. Il sync lo registra in `supports_confirmation`, l'API rifiuta
+di attivare la conferma altrove e la UI usa quel campo per non offrire
+un'opzione che non avrebbe effetto.
+
 ### Notifiche
 
 Le notifiche sono gestite nei contenuti ma non passano dalla conferma:
