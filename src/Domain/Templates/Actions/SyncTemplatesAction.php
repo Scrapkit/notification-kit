@@ -106,6 +106,10 @@ final class SyncTemplatesAction
     ): void {
         $template->update([
             'supports_confirmation' => $supportsConfirmation,
+            // The one user-owned column sync may touch: a confirmation flag on
+            // content the kit never sends would sit there promising a gate
+            // that does not exist.
+            ...$supportsConfirmation ? [] : ['requires_confirmation' => false],
             'type' => $definition->type,
             'name' => $definition->name,
             'description' => $definition->description,

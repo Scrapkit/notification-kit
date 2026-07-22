@@ -5,6 +5,13 @@ Tutte le modifiche degne di nota a `scrapkit/notification-kit`.
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il
 versionamento è [semantico](https://semver.org/lang/it/).
 
+## [0.2.1] - 2026-07-22
+
+### Fixed
+
+- Il sync spegne i flag di conferma già salvati su contenuti che il kit non
+  invia: restavano lì a promettere un controllo inesistente.
+
 ## [0.2.0] - 2026-07-22
 
 ### Added

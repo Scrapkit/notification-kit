@@ -47,6 +47,30 @@ it('refuses to require confirmation on a template that cannot be held', function
         ->toBeFalse();
 });
 
+it('clears a confirmation flag that can no longer take effect', function (): void {
+    // A row saved before the class stopped supporting confirmation, or before
+    // the kit knew the difference: the flag is dead weight, so sync clears it.
+    NotificationTemplate::query()
+        ->where('key', 'invoices.paid_notification')
+        ->update(['requires_confirmation' => true]);
+
+    $this->artisan('notification-kit:sync')->assertSuccessful();
+
+    expect((bool) NotificationTemplate::query()->where('key', 'invoices.paid_notification')->value('requires_confirmation'))
+        ->toBeFalse();
+});
+
+it('leaves the confirmation flag alone on a mailable that supports it', function (): void {
+    NotificationTemplate::query()
+        ->where('key', 'invoices.paid')
+        ->update(['requires_confirmation' => true]);
+
+    $this->artisan('notification-kit:sync')->assertSuccessful();
+
+    expect((bool) NotificationTemplate::query()->where('key', 'invoices.paid')->value('requires_confirmation'))
+        ->toBeTrue();
+});
+
 it('still allows requiring confirmation on a managed mailable', function (): void {
     $this->actingAs(new User)
         ->putJson('notification-kit/api/v1/templates/users.welcome/content', [
