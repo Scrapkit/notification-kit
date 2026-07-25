@@ -14,11 +14,17 @@ versionamento è [semantico](https://semver.org/lang/it/).
 
 ## [0.2.0] - 2026-07-22
 
-### Added
+### Changed
 
-- Nuova colonna `supports_confirmation` (di proprietà del codice, popolata dal
-  sync) e migration `add_supports_confirmation_to_notification_kit_templates`.
-  Da pubblicare ed eseguire dopo l'aggiornamento.
+- **Richiede una migration.** Nuova colonna `supports_confirmation` (di proprietà
+  del codice, popolata dal sync) e migration
+  `add_supports_confirmation_to_notification_kit_templates_table`: va pubblicata ed
+  eseguita subito dopo l'aggiornamento, altrimenti il sync fallisce.
+
+  ```bash
+  php artisan vendor:publish --tag=notification-kit-migrations
+  php artisan migrate
+  ```
 
 ### Fixed
 
