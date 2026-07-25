@@ -5,6 +5,17 @@ Tutte le modifiche degne di nota a `scrapkit/notification-kit`.
 Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/) e il
 versionamento è [semantico](https://semver.org/lang/it/).
 
+## [1.0.0] - 2026-07-25
+
+Prima release stabile. Nessun cambiamento di codice rispetto alla 0.2.1: l'API
+pubblica — contratto `Manageable`, endpoint JSON versionati, colonna
+`supports_confirmation` — è stata revisionata e viene congelata. Da qui in avanti
+ogni breaking change richiede una MAJOR, e ciò che viene rimosso passa prima da
+una deprecation in una MINOR.
+
+Se stai aggiornando da una 0.1.x, applica prima la migration richiesta dalla
+0.2.0.
+
 ## [0.2.1] - 2026-07-22
 
 ### Fixed
